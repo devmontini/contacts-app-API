@@ -4,6 +4,19 @@ const { PrismaClient } = require("@prisma/client");
 const contactRouter = new Router();
 const prisma = new PrismaClient();
 
+contactRouter.get("/", async (req, res) => {
+  try {
+    const data = await prisma.contact.findMany({
+      orderBy: {
+        name: "asc",
+      },
+    });
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 contactRouter.get("/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
