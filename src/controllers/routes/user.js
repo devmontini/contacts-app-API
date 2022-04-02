@@ -1,6 +1,21 @@
 const { Router } = require("express");
+const { PrismaClient } = require("@prisma/client");
 
 const userRouter = new Router();
+const prisma = new PrismaClient();
+
+userRouter.get("/", async (req, res) => {
+  try {
+    const data = await prisma.user.findMany({
+      orderBy: {
+        name: "asc",
+      },
+    });
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 userRouter.get("/:id", async (req, res) => {
   try {

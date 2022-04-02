@@ -1,6 +1,8 @@
 const { Router } = require("express");
+const { PrismaClient } = require("@prisma/client");
 
 const contactRouter = new Router();
+const prisma = new PrismaClient();
 
 contactRouter.get("/:id", async (req, res) => {
   try {
