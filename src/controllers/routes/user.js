@@ -23,7 +23,16 @@ userRouter.get("/:id", async (req, res) => {
     const data = await prisma.user.findUnique({
       where: { id: id },
       include: {
-        posts: {
+        post: {
+          select: {
+            title: true,
+            content: true,
+          },
+          orderBy: {
+            createdAt: "asc",
+          },
+        },
+        contact: {
           select: {
             name: true,
             email: true,
