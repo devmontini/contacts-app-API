@@ -30,24 +30,41 @@ postRouter.get("/:id", async (req, res) => {
         },
       },
     });
+
     const data1 = data[0].contact;
     const data2 = data1.map((el) => el.auth);
     const dataArr = new Set(data2);
-    const post = [...dataArr];
+    const postIDs = [...dataArr];
 
-    // const daton = prisma.user.findUnique({
-    //   where: { auth: el },
-    //   include: {
-    //     post: {
-    //       select: {
-    //         title: true,
-    //         content: true,
-    //       },
-    //     },
-    //   },
-    // });
+    const contacts = await prisma.user.findMany({
+      where: { auth: { in: postIDs } },
+      include: {
+        post: {
+          select: {
+            title: true,
+            content: true,
+            createdAt: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+      },
+    });
 
-    res.json(post);
+    const items = [];
+    for (let i = 0; i < contacts.length; i++) {
+      const asd = contacts[i].post;
+      for (let i = 0; i < asd.length; i++) {
+        items.push(asd[i]);
+      }
+    }
+
+    const orderPost = items.sort(function (a, b) {
+      return a.createdAt > b.createdAt ? -1 : a.createdAt < b.createdAt ? 1 : 0;
+    });
+
+    res.json(orderPost);
   } catch (error) {
     console.error(error);
   }
@@ -56,14 +73,22 @@ postRouter.get("/:id", async (req, res) => {
 postRouter.post("/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
+
+    const dataName = await prisma.user.findUnique({
+      where: { id: id },
+    });
+    const name = dataName.name;
+
     const { title, content } = req.body;
     const data = await prisma.post.create({
       data: {
+        nameUser: name,
         title,
         content,
         author: { connect: { id: id } },
       },
     });
+
     res.json(data);
   } catch (error) {
     console.error(error);
@@ -86,9 +111,9 @@ postRouter.put("/:id", async (req, res) => {
   }
 });
 
-postRouter.delete("/:id", async (req, res) => {
+postRouter.delete("/", async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
+    const id = req.body;
     const data = await prisma.post.delete({
       where: { id: id },
     });

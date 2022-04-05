@@ -12,7 +12,7 @@ datasource db {
 
 model User {
   id          Int       @id @default(autoincrement())
-  auth        Int       @unique
+  auth        Int       @unique @default(autoincrement())
   name        String
   description String
   contact     Contact[]
@@ -23,6 +23,7 @@ model Post {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  nameUser  String
   title     String   @db.VarChar(255)
   content   String
   author    User     @relation(fields: [authorId], references: [id])

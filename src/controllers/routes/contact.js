@@ -32,29 +32,22 @@ contactRouter.get("/:id", async (req, res) => {
 contactRouter.post("/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const { auth, name } = req.body;
+    const { auth } = req.body;
+
+    const dataName = await prisma.user.findUnique({
+      where: { auth: auth },
+    });
+
+    const names = dataName.name;
+
     const data = await prisma.contact.create({
       data: {
-        auth,
-        name,
+        auth: auth,
+        name: names,
         author: { connect: { id: id } },
       },
     });
-    res.json(data);
-  } catch (error) {
-    console.error(error);
-  }
-});
 
-contactRouter.put("/", async (req, res) => {
-  try {
-    const { name, id } = req.body;
-    const data = await prisma.contact.update({
-      where: { id: id },
-      data: {
-        name,
-      },
-    });
     res.json(data);
   } catch (error) {
     console.error(error);
@@ -63,7 +56,7 @@ contactRouter.put("/", async (req, res) => {
 
 contactRouter.delete("/:id", async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
+    const id = req.body;
     const data = await prisma.contact.delete({
       where: { id: id },
     });

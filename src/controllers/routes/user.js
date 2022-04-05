@@ -35,6 +35,8 @@ userRouter.get("/:id", async (req, res) => {
         contact: {
           select: {
             name: true,
+            auth: true,
+            id: true,
           },
           orderBy: {
             name: "asc",
@@ -50,9 +52,9 @@ userRouter.get("/:id", async (req, res) => {
 
 userRouter.post("/", async (req, res) => {
   try {
-    const { auth, name, description } = req.body;
+    const { name, description } = req.body;
     const data = await prisma.user.create({
-      data: { auth, name, description },
+      data: { name, description },
     });
     res.json(data);
   } catch (error) {
