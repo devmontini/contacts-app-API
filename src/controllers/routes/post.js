@@ -35,10 +35,6 @@ postRouter.get("/:id", async (req, res) => {
     const dataArr = new Set(data2);
     const post = [...dataArr];
 
-    for (let i = 0; i < post.length; i++) {
-      console.log(i);
-    }
-
     // const daton = prisma.user.findUnique({
     //   where: { auth: el },
     //   include: {
