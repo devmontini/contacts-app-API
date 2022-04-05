@@ -11,12 +11,12 @@ datasource db {
 }
 
 model User {
-  id      Int       @id @default(autoincrement())
-  name    String
-  phone   String
-  email   String?
-  contact Contact[]
-  post    Post[]
+  id          Int       @id @default(autoincrement())
+  auth        Int       @unique
+  name        String
+  description String
+  contact     Contact[]
+  post        Post[]
 }
 
 model Post {
@@ -24,8 +24,7 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title     String   @db.VarChar(255)
-  content   String?
-  published Boolean  @default(false)
+  content   String
   author    User     @relation(fields: [authorId], references: [id])
   authorId  Int
 }
@@ -34,9 +33,8 @@ model Contact {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  auth      Int
   name      String
-  phone     String
-  email     String?
   author    User     @relation(fields: [authorId], references: [id])
   authorId  Int
 }

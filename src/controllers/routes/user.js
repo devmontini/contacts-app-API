@@ -35,8 +35,6 @@ userRouter.get("/:id", async (req, res) => {
         contact: {
           select: {
             name: true,
-            email: true,
-            phone: true,
           },
           orderBy: {
             name: "asc",
@@ -52,9 +50,9 @@ userRouter.get("/:id", async (req, res) => {
 
 userRouter.post("/", async (req, res) => {
   try {
-    const { name, email, phone } = req.body;
+    const { auth, name, description } = req.body;
     const data = await prisma.user.create({
-      data: { name, email, phone },
+      data: { auth, name, description },
     });
     res.json(data);
   } catch (error) {
@@ -65,10 +63,10 @@ userRouter.post("/", async (req, res) => {
 userRouter.put("/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const { name, email, phone } = req.body;
+    const { name, description } = req.body;
     const data = await prisma.user.update({
       where: { id: id },
-      data: { name, email, phone },
+      data: { name, description },
     });
     res.json(data);
   } catch (error) {

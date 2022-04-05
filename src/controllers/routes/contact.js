@@ -32,12 +32,11 @@ contactRouter.get("/:id", async (req, res) => {
 contactRouter.post("/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const { name, phone, email } = req.body;
+    const { auth, name } = req.body;
     const data = await prisma.contact.create({
       data: {
+        auth,
         name,
-        phone,
-        email,
         author: { connect: { id: id } },
       },
     });
@@ -49,13 +48,11 @@ contactRouter.post("/:id", async (req, res) => {
 
 contactRouter.put("/", async (req, res) => {
   try {
-    const { name, phone, email, id } = req.body;
+    const { name, id } = req.body;
     const data = await prisma.contact.update({
       where: { id: id },
       data: {
         name,
-        phone,
-        email,
       },
     });
     res.json(data);

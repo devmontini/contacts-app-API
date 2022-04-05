@@ -8,10 +8,50 @@ postRouter.get("/", async (req, res) => {
   try {
     const data = await prisma.post.findMany({
       orderBy: {
-        createdAt: "asc",
+        createdAt: "desc",
       },
     });
     res.json(data);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+postRouter.get("/:id", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const data = await prisma.user.findMany({
+      where: { id: id },
+      include: {
+        contact: {
+          select: {
+            auth: true,
+          },
+        },
+      },
+    });
+    const data1 = data[0].contact;
+    const data2 = data1.map((el) => el.auth);
+    const dataArr = new Set(data2);
+    const post = [...dataArr];
+
+    for (let i = 0; i < post.length; i++) {
+      console.log(i);
+    }
+
+    // const daton = prisma.user.findUnique({
+    //   where: { auth: el },
+    //   include: {
+    //     post: {
+    //       select: {
+    //         title: true,
+    //         content: true,
+    //       },
+    //     },
+    //   },
+    // });
+
+    res.json(post);
   } catch (error) {
     console.error(error);
   }
