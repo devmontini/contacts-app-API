@@ -4,26 +4,35 @@ const { PrismaClient } = require("@prisma/client");
 const contactRouter = new Router();
 const prisma = new PrismaClient();
 
-contactRouter.get("/", async (req, res) => {
-  try {
-    const data = await prisma.contact.findMany({
-      orderBy: {
-        name: "asc",
-      },
-    });
-    res.json(data);
-  } catch (error) {
-    console.error(error);
-  }
-});
-
 contactRouter.get("/:id", async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
-    const data = await prisma.contact.findUnique({
-      where: { id: id },
+    const id = req.params.id;
+    const data = await prisma.user.findUnique({
+      where: { auth: id },
+      include: {
+        contact: {
+          select: {
+            auth: true,
+            name: true,
+            id: true,
+          },
+          orderBy: {
+            name: "asc",
+          },
+        },
+      },
     });
-    res.json(data);
+
+    const data1 = data.contact;
+    const data2 = data1.map((el) => el.auth);
+    const dataArr = new Set(data2);
+    const postIDs = [...dataArr];
+
+    const contacts = await prisma.user.findMany({
+      where: { auth: { in: postIDs } },
+    });
+
+    res.json(contacts);
   } catch (error) {
     console.error(error);
   }
@@ -31,8 +40,12 @@ contactRouter.get("/:id", async (req, res) => {
 
 contactRouter.post("/:id", async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
     const { auth } = req.body;
+
+    const myPerfil = await prisma.user.findUnique({
+      where: { auth: id },
+    });
 
     const dataName = await prisma.user.findUnique({
       where: { auth: auth },
@@ -44,7 +57,8 @@ contactRouter.post("/:id", async (req, res) => {
       data: {
         auth: auth,
         name: names,
-        author: { connect: { id: id } },
+        followed: true,
+        author: { connect: { id: myPerfil.id } },
       },
     });
 

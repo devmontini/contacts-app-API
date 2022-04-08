@@ -19,9 +19,9 @@ postRouter.get("/", async (req, res) => {
 
 postRouter.get("/:id", async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
     const data = await prisma.user.findMany({
-      where: { id: id },
+      where: { auth: id },
       include: {
         contact: {
           select: {
@@ -41,6 +41,8 @@ postRouter.get("/:id", async (req, res) => {
       include: {
         post: {
           select: {
+            id: true,
+            nameUser: true,
             title: true,
             content: true,
             createdAt: true,
@@ -63,7 +65,6 @@ postRouter.get("/:id", async (req, res) => {
     const orderPost = items.sort(function (a, b) {
       return a.createdAt > b.createdAt ? -1 : a.createdAt < b.createdAt ? 1 : 0;
     });
-
     res.json(orderPost);
   } catch (error) {
     console.error(error);
@@ -72,12 +73,13 @@ postRouter.get("/:id", async (req, res) => {
 
 postRouter.post("/:id", async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
 
     const dataName = await prisma.user.findUnique({
-      where: { id: id },
+      where: { auth: id },
     });
     const name = dataName.name;
+    const ids = dataName.id;
 
     const { title, content } = req.body;
     const data = await prisma.post.create({
@@ -85,7 +87,7 @@ postRouter.post("/:id", async (req, res) => {
         nameUser: name,
         title,
         content,
-        author: { connect: { id: id } },
+        author: { connect: { id: ids } },
       },
     });
 
@@ -111,9 +113,9 @@ postRouter.put("/:id", async (req, res) => {
   }
 });
 
-postRouter.delete("/", async (req, res) => {
+postRouter.delete("/:id", async (req, res) => {
   try {
-    const id = req.body;
+    const id = parseInt(req.params.id);
     const data = await prisma.post.delete({
       where: { id: id },
     });

@@ -12,7 +12,7 @@ datasource db {
 
 model User {
   id          Int       @id @default(autoincrement())
-  auth        Int       @unique @default(autoincrement())
+  auth        String    @unique
   name        String
   description String
   contact     Contact[]
@@ -34,7 +34,8 @@ model Contact {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  auth      Int
+  followed  Boolean  @default(false)
+  auth      String
   name      String
   author    User     @relation(fields: [authorId], references: [id])
   authorId  Int
