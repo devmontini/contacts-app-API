@@ -7,6 +7,7 @@ const prisma = new PrismaClient();
 followRouter.get("/", async (req, res) => {
   try {
     const { auth, id } = req.body;
+    console.log(auth, id);
     const data = await prisma.user.findUnique({
       where: { auth: auth },
       include: {
@@ -28,7 +29,7 @@ followRouter.get("/", async (req, res) => {
       const findContact = contacts.filter((el) => el.auth === id);
       return filteredeContact.push(findContact);
     }
-    res.json(filteredeContact);
+    res.json(data);
   } catch (error) {
     console.error(error);
   }
