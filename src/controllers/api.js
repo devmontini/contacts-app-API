@@ -8,10 +8,10 @@ const followRouter = require("./routes/follow");
 
 const router = Router();
 
+router.use("/follow", followRouter);
 router.use("/perfil", perfilRouter);
 router.use("/post", postRouter);
 router.use("/user", userRouter);
 router.use("/contact", contactRouter);
-router.use("/follow", followRouter);
 
 module.exports = router;

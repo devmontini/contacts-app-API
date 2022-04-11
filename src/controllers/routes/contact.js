@@ -38,27 +38,20 @@ contactRouter.get("/:id", async (req, res) => {
   }
 });
 
-contactRouter.post("/:id", async (req, res) => {
+contactRouter.post("/:id/:auth", async (req, res) => {
   try {
-    const id = req.params.id;
-    const { auth } = req.body;
-
-    const myPerfil = await prisma.user.findUnique({
-      where: { auth: id },
-    });
+    const id = parseInt(req.params.id);
+    const auth = parseInt(req.params.auth);
 
     const dataName = await prisma.user.findUnique({
-      where: { auth: auth },
+      where: { id: id },
     });
-
-    const names = dataName.name;
 
     const data = await prisma.contact.create({
       data: {
-        auth: auth,
-        name: names,
-        followed: true,
-        author: { connect: { id: myPerfil.id } },
+        auth: dataName.auth,
+        name: dataName.name,
+        author: { connect: { id: auth } },
       },
     });
 
@@ -70,7 +63,7 @@ contactRouter.post("/:id", async (req, res) => {
 
 contactRouter.delete("/:id", async (req, res) => {
   try {
-    const id = req.body;
+    const id = parseInt(req.params.id);
     const data = await prisma.contact.delete({
       where: { id: id },
     });
