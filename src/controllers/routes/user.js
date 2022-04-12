@@ -1,10 +1,10 @@
 const { Router } = require("express");
 const { PrismaClient } = require("@prisma/client");
-
+const { jwtCheck } = require("../authz/check-jwt");
 const userRouter = new Router();
 const prisma = new PrismaClient();
 
-userRouter.get("/", async (req, res) => {
+userRouter.get("/", jwtCheck, async (req, res) => {
   try {
     const { auth, id } = req.body;
     console.log(auth, id);
@@ -28,7 +28,7 @@ userRouter.get("/", async (req, res) => {
   }
 });
 
-userRouter.get("/:id", async (req, res) => {
+userRouter.get("/:id", jwtCheck, async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const data = await prisma.user.findUnique({

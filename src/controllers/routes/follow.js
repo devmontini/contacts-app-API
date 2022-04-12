@@ -1,10 +1,10 @@
 const { Router } = require("express");
 const { PrismaClient } = require("@prisma/client");
-
+const { jwtCheck } = require("../authz/check-jwt");
 const followRouter = new Router();
 const prisma = new PrismaClient();
 
-followRouter.get("/:id/:auth", async (req, res) => {
+followRouter.get("/:id/:auth", jwtCheck, async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const auth = req.params.auth;

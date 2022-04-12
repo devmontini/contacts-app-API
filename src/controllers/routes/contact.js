@@ -1,10 +1,22 @@
 const { Router } = require("express");
 const { PrismaClient } = require("@prisma/client");
-
+const { jwtCheck } = require("../authz/check-jwt");
 const contactRouter = new Router();
 const prisma = new PrismaClient();
 
-contactRouter.get("/:id", async (req, res) => {
+contactRouter.get("/search/:name", async (req, res) => {
+  try {
+    const asd = req.params.name;
+    const data = await prisma.user.findMany({
+      where: { name: asd },
+    });
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+contactRouter.get("/:id", jwtCheck, async (req, res) => {
   try {
     const id = req.params.id;
     const data = await prisma.user.findUnique({
@@ -61,7 +73,7 @@ contactRouter.post("/:id/:auth", async (req, res) => {
   }
 });
 
-contactRouter.delete("/:id", async (req, res) => {
+contactRouter.delete("/:id", jwtCheck, async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const data = await prisma.contact.delete({

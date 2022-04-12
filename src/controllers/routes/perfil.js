@@ -1,10 +1,10 @@
 const { Router } = require("express");
 const { PrismaClient } = require("@prisma/client");
-
+const { jwtCheck } = require("../authz/check-jwt");
 const perfilRouter = new Router();
 const prisma = new PrismaClient();
 
-perfilRouter.get("/", async (req, res) => {
+perfilRouter.get("/", jwtCheck, async (req, res) => {
   try {
     const data = await prisma.user.findMany({
       orderBy: {
@@ -17,7 +17,7 @@ perfilRouter.get("/", async (req, res) => {
   }
 });
 
-perfilRouter.get("/:id", async (req, res) => {
+perfilRouter.get("/:id", jwtCheck, async (req, res) => {
   try {
     const auth = req.params.id;
     const data = await prisma.user.findUnique({
@@ -52,7 +52,7 @@ perfilRouter.get("/:id", async (req, res) => {
   }
 });
 
-perfilRouter.post("/", async (req, res) => {
+perfilRouter.post("/", jwtCheck, async (req, res) => {
   try {
     const { auth, name, description } = req.body;
     const data = await prisma.user.create({
@@ -64,7 +64,7 @@ perfilRouter.post("/", async (req, res) => {
   }
 });
 
-perfilRouter.put("/:id", async (req, res) => {
+perfilRouter.put("/:id", jwtCheck, async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const { name, description } = req.body;
@@ -78,7 +78,7 @@ perfilRouter.put("/:id", async (req, res) => {
   }
 });
 
-perfilRouter.delete("/:id", async (req, res) => {
+perfilRouter.delete("/:id", jwtCheck, async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const post = await prisma.user.delete({

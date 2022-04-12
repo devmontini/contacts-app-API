@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { PrismaClient } = require("@prisma/client");
-
+const { jwtCheck } = require("../authz/check-jwt");
 const postRouter = new Router();
 const prisma = new PrismaClient();
 
@@ -17,7 +17,7 @@ postRouter.get("/", async (req, res) => {
   }
 });
 
-postRouter.get("/:id", async (req, res) => {
+postRouter.get("/:id", jwtCheck, async (req, res) => {
   try {
     const id = req.params.id;
     const data = await prisma.user.findMany({
@@ -71,7 +71,7 @@ postRouter.get("/:id", async (req, res) => {
   }
 });
 
-postRouter.post("/:id", async (req, res) => {
+postRouter.post("/:id", jwtCheck, async (req, res) => {
   try {
     const id = req.params.id;
 
@@ -97,7 +97,7 @@ postRouter.post("/:id", async (req, res) => {
   }
 });
 
-postRouter.put("/:id", async (req, res) => {
+postRouter.put("/:id", jwtCheck, async (req, res) => {
   try {
     const { title, content, id } = req.body;
     const data = await prisma.post.update({
@@ -113,7 +113,7 @@ postRouter.put("/:id", async (req, res) => {
   }
 });
 
-postRouter.delete("/:id", async (req, res) => {
+postRouter.delete("/:id", jwtCheck, async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const data = await prisma.post.delete({
