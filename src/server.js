@@ -6,9 +6,9 @@ const bodyParser = require("body-parser");
 
 //constants
 const app = express();
-
+const PORT = process.env.PORT || 3001;
 //settings
-app.set("port", 3001);
+app.set("port", PORT);
 app.set("json spaces", 2);
 
 //middleware
