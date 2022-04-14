@@ -31,8 +31,8 @@
 
 ### Proyecto de actividades turísticas!
 - Single Page Application (SPA), BD & API.
-- Search countries, add activities, sort, fither.
+- A mini DB for a twitter app, post mesagges, follow and unfollow friends, filther ppost by follows, search contacts & more.
 - Tecnologías:<br />
-    Back => Node, Express <br />
-    BD => SQL, Sequaleeze<br />
+    Back => Node, JSW, JavaScript, Express <br />
+    BD => Prisma, SQL<br />
     Front => https://github.com/devmontini/contacts-app-CLI
