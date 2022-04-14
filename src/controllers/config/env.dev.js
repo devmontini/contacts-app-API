@@ -31,7 +31,7 @@ if (!clientOriginUrl) {
   );
 }
 
-const clientOrigins = ["http://localhost:3001"];
+const clientOrigins = ["https://cotancts-app.herokuapp.com/"];
 
 module.exports = {
   audience,
