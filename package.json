@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "Contacts App",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -7,7 +7,7 @@
     "start": "node ./src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "devMontini",
   "license": "ISC",
   "engines": {
     "node": ">=12.18.3",
