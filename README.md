@@ -1,4 +1,4 @@
-## Countries App (API)! <img width="22px" src="https://raw.githubusercontent.com/iampavangandhi/iampavangandhi/master/gifs/Hi.gif">
+## Contacts App (API)! <img width="22px" src="https://raw.githubusercontent.com/iampavangandhi/iampavangandhi/master/gifs/Hi.gif">
 
 
 <div>
@@ -29,7 +29,7 @@
 
 <img align="right" alt="GIF" src="https://media.giphy.com/media/13HgwGsXF0aiGY/giphy.gif" />
 
-### Proyecto de actividades turísticas!
+### Proyecto de contacto y aps!
 - Single Page Application (SPA), BD & API.
 - A mini DB for a twitter app, post mesagges, follow and unfollow friends, filther ppost by follows, search contacts & more.
 - Tecnologías:<br />
